@@ -20,6 +20,7 @@ def number_sing(n):
     return (n-65535) if n & 0b1000000000000000 else n
 
 def get_data():
+    data_dict = {}
     try:
         c = client(host="192.168.127.254", unit=7) 
         gensets = c.read(FC=3, ADR=287, LEN=5)
@@ -41,16 +42,30 @@ def get_data():
             'BIN': b_in}
     except:
         print('Неудачная попытка опроса.')
+        bot.reply_to(message, 'Опрос не удался')
     return data_dict
 
 @bot.message_handler(commands=['wtf'])
 def send_status(message):
-    try:
-        data = get_data()
+    log_to_csv(message)
+    data = get_data()
+    if data:
         text = f"{datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\nГПГУ 1: {data['ГПГУ 1 ']} кВт\nГПГУ 2: {data['ГПГУ 2 ']} кВт\nГПГУ 3: {data['ГПГУ 3 ']} кВт\nГПГУ 4: {data['ГПГУ 4 ']} кВт\nГПГУ 5: {data['ГПГУ 5 ']} кВт\nMainsImport: {data['MainsImport']} кВт\nМощность завода: {data['Мощность завода']} кВт\nMWh: {data['MWh']}\nСумм мощность ГПГУ: {data['Сумм мощность ГПГУ']} кВт"
         bot.reply_to(message, text)
-        log_to_csv(message)
-    except:
-        bot.reply_to(message, 'Опрос не удался')
+
+@bot.message_handler(commands=['get_csv'])
+def send_csv(message):
+    doc = open('data.csv', 'rb')
+    bot.send_document(message.from_user.id, doc)
+
+@bot.message_handler(commands=['get_syslog'])
+def send_syslog(message):
+    doc = open('syslog.log', 'rb')
+    bot.send_document(message.from_user.id, doc)
+
+@bot.message_handler(commands=['get_msglog'])
+def send_msglog(message):
+    doc = open('msglog.log', 'rb')
+    bot.send_document(message.from_user.id, doc)
 
 bot.polling(none_stop=True, timeout=300)
