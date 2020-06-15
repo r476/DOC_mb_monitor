@@ -1,4 +1,4 @@
-﻿import telebot
+import telebot
 from telebot import apihelper
 from modbus.client import *
 import csv, time, datetime
@@ -6,6 +6,18 @@ import csv, time, datetime
 apihelper.proxy = {'https':'socks5://cx1b2j:E1caTT@186.65.117.60:9396'}
 token = '1298999210:AAHQXHgqW0y0A9kjCPB3XSeBZKDNrgmK9fY'
 bot = telebot.TeleBot(token)
+
+def log_to_csv(message):
+    date = datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+    uid = message.from_user.id
+    name = message.from_user.first_name
+    text = message.text
+    with open('syslog.log', 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([date, uid, name, text, ])
+
+def number_sing(n):
+    return (n-65535) if n & 0b1000000000000000 else n
 
 def get_data():
     try:
@@ -17,12 +29,12 @@ def get_data():
         tot_run_p_act = c.read(FC=3, ADR=339, LEN=2)[1]
         b_in = c.read(FC=3, ADR=2, LEN=1)[0]
         data_dict = {'Дата Время':datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S'), 
-            'ГПГУ 1 ': gensets[0], 
-            'ГПГУ 2 ': gensets[1], 
-            'ГПГУ 3 ': gensets[2], 
-            'ГПГУ 4 ': gensets[3], 
-            'ГПГУ 5 ': gensets[4], 
-            'MainsImport': mains_import, 
+            'ГПГУ 1 ': number_sing(gensets[0]), 
+            'ГПГУ 2 ': number_sing(gensets[1]), 
+            'ГПГУ 3 ': number_sing(gensets[2]), 
+            'ГПГУ 4 ': number_sing(gensets[3]), 
+            'ГПГУ 5 ': number_sing(gensets[4]), 
+            'MainsImport': number_sing(mains_import), 
             'Мощность завода': object_p, 
             'MWh': mwh, 
             'Сумм мощность ГПГУ': tot_run_p_act, 
@@ -37,6 +49,7 @@ def send_status(message):
         data = get_data()
         text = f"{datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\nГПГУ 1: {data['ГПГУ 1 ']} кВт\nГПГУ 2: {data['ГПГУ 2 ']} кВт\nГПГУ 3: {data['ГПГУ 3 ']} кВт\nГПГУ 4: {data['ГПГУ 4 ']} кВт\nГПГУ 5: {data['ГПГУ 5 ']} кВт\nMainsImport: {data['MainsImport']} кВт\nМощность завода: {data['Мощность завода']} кВт\nMWh: {data['MWh']}\nСумм мощность ГПГУ: {data['Сумм мощность ГПГУ']} кВт"
         bot.reply_to(message, text)
+        log_to_csv(message)
     except:
         bot.reply_to(message, 'Опрос не удался')
 
