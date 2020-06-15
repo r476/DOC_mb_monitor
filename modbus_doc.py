@@ -67,8 +67,7 @@ def to_csv(data_file, order, data):
 
 def log_to_csv(text):
    with open('msglog.log', 'a', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(text)
+        f.write(text + '\n')
 
 def send_messages(id_list, text):
     try:
