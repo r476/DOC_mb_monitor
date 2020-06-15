@@ -1,58 +1,96 @@
-from modbus.client import *
+﻿from modbus.client import *
 import csv, time, datetime, telebot
 from telebot import apihelper
+from time import sleep
 
-order = ['Дата Время', 'ГПГУ 1 ', 'ГПГУ 2 ', 'ГПГУ 3 ', 'ГПГУ 4 ', 'ГПГУ 5 ']
+id_list = [723253749, 
+           723253748]
+
+titles = ['Дата Время', 
+          'ГПГУ 1 ', 
+          'ГПГУ 2 ', 
+          'ГПГУ 3 ', 
+          'ГПГУ 4 ', 
+          'ГПГУ 5 ', 
+          'MainsImport', 
+          'Мощность завода', 
+          'MWh', 
+          'Сумм мощность ГПГУ', 
+          'BIN']
 
 apihelper.proxy = {'https':'socks5://cx1b2j:E1caTT@186.65.117.60:9396'}
-token = '827576612:AAEX0IHqMW5x-oWrh8T1ZXhE-9_K8pXMTJ0'
+token = '1298999210:AAHQXHgqW0y0A9kjCPB3XSeBZKDNrgmK9fY'
 bot = telebot.TeleBot(token)
 
 data_file = "data.csv"
+
 #with open(data_file, 'w') as f:
 #    writer = csv.writer(f)
-#    writer.writerow(['Дата Время', 'ГПГУ 1 ', 'ГПГУ 2 ', 'ГПГУ 3 ', 'ГПГУ 4 ', 'ГПГУ 5 '])
-    
+#    writer.writerow(titles)
 
-c = client(host="192.168.127.254", unit=6) 
-data = c.read(FC=3, ADR=287, LEN=5)
-data_dict_old = {
-    'ГПГУ 1 ': data[0],
-    'ГПГУ 2 ': data[1],
-    'ГПГУ 3 ': data[2],
-    'ГПГУ 4 ': data[3],
-    'ГПГУ 5 ': data[4]
-}
+def number_sing(n):
+    return (n-65535) if n & 0b1000000000000000 else n
 
-while True:
+# получаю данные
+def get_data():
     try:
-        data = list(c.read(FC=3, ADR=287, LEN=5))
-        data_dict_new = {
-            'Дата Время':datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S'),
-            'ГПГУ 1 ': data[0],
-            'ГПГУ 2 ': data[1],
-            'ГПГУ 3 ': data[2],
-            'ГПГУ 4 ': data[3],
-            'ГПГУ 5 ': data[4]
-            }
-        for k in data_dict_old.keys():
-            if not isinstance(data_dict_old[k], str):
-                if data_dict_old[k] != 0 and data_dict_new[k] == 0:
-                    print(f'{k} остановлена {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
-                    bot.send_message(723253749, f'{k} остановлена {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
-                if data_dict_old[k] == 0 and data_dict_new[k] != 0:
-                    print(f'{k} включена в работу {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')            
-                    bot.send_message(723253749, f'{k} включена в работу {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
-
-        with open(data_file, "a", newline='') as f:
-            writer = csv.DictWriter(f, order)
-            writer.writerow(data_dict_new)
-        data_dict_old = data_dict_new
-        time.sleep(1)
+        c = client(host="192.168.127.254", unit=7)
+        
+        gensets = c.read(FC=3, ADR=287, LEN=5)
+        mains_import = c.read(FC=3, ADR=231, LEN=1)[0]
+        object_p = c.read(FC=3, ADR=272, LEN=2)[1]
+        mwh = c.read(FC=3, ADR=283, LEN=2)[1]
+        tot_run_p_act = c.read(FC=3, ADR=339, LEN=2)[1]
+        b_in = c.read(FC=3, ADR=2, LEN=1)[0]
+        data_dict = {'Дата Время':datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S'), 
+            'ГПГУ 1 ': number_sing(gensets[0]), 
+            'ГПГУ 2 ': number_sing(gensets[1]), 
+            'ГПГУ 3 ': number_sing(gensets[2]), 
+            'ГПГУ 4 ': number_sing(gensets[3]), 
+            'ГПГУ 5 ': number_sing(gensets[4]), 
+            'MainsImport': number_sing(mains_import), 
+            'Мощность завода': object_p, 
+            'MWh': mwh, 
+            'Сумм мощность ГПГУ': tot_run_p_act, 
+            'BIN': b_in}
     except:
-        print('Похоже пропала связь...')
+        print('Неудачная попытка опроса.')
+        sleep(30)
+    return data_dict
+
+def to_csv(data_file, order, data):
+    with open(data_file, "a", newline='') as f:
+        writer = csv.DictWriter(f, order)
+        writer.writerow(data)
+
+data_dict_old = get_data()
+
+# Основной цикл
+while True:
+    data_dict_new = get_data()
+    
+    for k in ['ГПГУ 1 ', 'ГПГУ 2 ', 'ГПГУ 3 ', 'ГПГУ 4 ', 'ГПГУ 5 ']:
+        if data_dict_old[k] > 0 and data_dict_new[k] <= 0:
+            print(f'{k} остановлена {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
+            try:
+                bot.send_message(723253749, f'{k} остановлена {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
+            except:
+                print('Неудачная отправка сообщения')
+            sleep(30)
+        if data_dict_old[k] <= 0 and data_dict_new[k] > 0:
+            print(f'{k} включена в работу {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')            
+            try:
+                bot.send_message(723253749, f'{k} включена в работу {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
+            except:
+                print('Неудачная отправка сообщения')                
+            sleep(30)
+            
+    if data_dict_old['BIN'] != data_dict_new['BIN']:
+        print(f'Похоже, что отработал МСВ. {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')            
         try:
-            c = client(host="192.168.127.254", unit=6)
+            bot.send_message(723253749, f'Похоже, что отработал МСВ. {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}')
         except:
-            pass
-        time.sleep(30)
+            print('Неудачная отправка сообщения')
+    to_csv(data_file, titles, data_dict_new)
+    data_dict_old = data_dict_new
+    time.sleep(5)
