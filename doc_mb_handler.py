@@ -2,6 +2,7 @@ import telebot
 from telebot import apihelper
 from modbus.client import *
 import csv, time, datetime
+import pandas as pd
 from pandas.tseries.offsets import Hour, Minute, Day
 import matplotlib.pyplot as plt
 from time import sleep
@@ -69,45 +70,45 @@ def make_graph(mean_int, interval):
 
 @bot.message_handler(commands=['get_data_3hour'])
 def send_data_3hour(message):
-	make_graph('T', Hour(3))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('T', Hour(3))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 
 @bot.message_handler(commands=['get_data_12hour'])
 def send_data_12hour(message):
-	make_graph('2T', Hour(12))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('2T', Hour(12))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 
 @bot.message_handler(commands=['get_data_24hour'])
 def send_data_24hour(message):
-	make_graph('2T', Hour(24))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('2T', Hour(24))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 
 @bot.message_handler(commands=['get_data_3days'])
 def send_data_3days(message):
-	make_graph('2T', Day(3))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('2T', Day(3))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 
 @bot.message_handler(commands=['get_data_7days'])
 def send_data_7days(message):
-	make_graph('5T', Day(7))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('5T', Day(7))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 
 @bot.message_handler(commands=['get_data_14days'])
 def send_data_14days(message):
-	make_graph('5T', Day(14))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('5T', Day(14))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 
 @bot.message_handler(commands=['get_data_30days'])
 def send_data_30days(message):
-	make_graph('5T', Day(30))
-	img = open('1.png', 'rb')
-	bot.send_photo(message.from_user.id, img)
+    make_graph('5T', Day(30))
+    img = open('1.png', 'rb')
+    bot.send_photo(message.from_user.id, img)
 	
 @bot.message_handler(commands=['wtf'])
 def send_status(message):
@@ -134,11 +135,10 @@ def send_msglog(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_msg(message):
-	bot.send_message(723253749, f'Сообщение от {message.from_user.first_name}\n{message.from_user.id}\n{message.text}')
+    bot.send_message(723253749, f'Сообщение от {message.from_user.first_name}\n{message.from_user.id}\n{message.text}')
 
 while True:
-	try:
-		bot.polling(none_stop=True)
-	except Exception as e:
-		print(e)
-		speep(10)
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        print(e)
