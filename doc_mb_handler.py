@@ -55,7 +55,7 @@ def make_graph(mean_int, interval):
     data_mean = df.resample(mean_int).mean()
     data_sample = data_mean[data_mean.index[-1]-interval:]
 
-    plt.figure(figsize=(15,5))
+    plt.figure(figsize=(15,15))
     plt.ylim([-1000, 7000])
     plt.ylabel('кВт')
     plt.xticks(rotation=45)
@@ -66,13 +66,48 @@ def make_graph(mean_int, interval):
     plt.legend(['Завод', 'Импорт', 'ГПГУ'])
     plt.savefig('1.png')
 
-@bot.message_handler(commands=['get_data_1hour'])
-def send_data_1hour(message):
-	make_graph('T', Hour())
+@bot.message_handler(commands=['get_data_3hour'])
+def send_data_3hour(message):
+	make_graph('T', Hour(3))
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+
+@bot.message_handler(commands=['get_data_12hour'])
+def send_data_12hour(message):
+	make_graph('2T', Hour(12))
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+
+@bot.message_handler(commands=['get_data_24hour'])
+def send_data_24hour(message):
+	make_graph('2T', Hour(24))
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+
+@bot.message_handler(commands=['get_data_3days'])
+def send_data_3days(message):
+	make_graph('2T', Day(3))
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+
+@bot.message_handler(commands=['get_data_7days'])
+def send_data_7days(message):
+	make_graph('5T', Day(7))
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+
+@bot.message_handler(commands=['get_data_14days'])
+def send_data_14days(message):
+	make_graph('5T', Day(14))
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+
+@bot.message_handler(commands=['get_data_30days'])
+def send_data_30days(message):
+	make_graph('5T', Day(30))
 	img = open('1.png', 'rb')
 	bot.send_photo(message.from_user.id, img)
 	
-
 @bot.message_handler(commands=['wtf'])
 def send_status(message):
     log_to_csv(message)
@@ -100,5 +135,8 @@ def send_msglog(message):
 def echo_msg(message):
 	bot.send_message(723253749, f'Сообщение от {message.from_user.first_name}\n{message.from_user.id}\n{message.text}')
 
-    
-bot.polling(none_stop=True, timeout=300)
+while True:
+	try:
+		bot.polling(none_stop=True, timeout=300)
+	except:
+		print('ой... ошибчк...')
