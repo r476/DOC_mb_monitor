@@ -66,7 +66,7 @@ def make_graph(mean_int, interval):
     plt.legend(['Завод', 'Импорт', 'ГПГУ'])
     plt.savefig('1.png')
 
-@bot.message_handler(commands=['wtf'])
+@bot.message_handler(commands=['get_data_1hour'])
 def send_data_1hour(message):
 	make_graph('T', Hour())
 	img = open('1.png', 'rb')
