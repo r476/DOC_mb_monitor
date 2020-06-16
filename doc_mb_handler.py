@@ -68,4 +68,9 @@ def send_msglog(message):
     doc = open('msglog.log', 'rb')
     bot.send_document(message.from_user.id, doc)
 
+@bot.message_handler(func=lambda message: True)
+def echo_msg(message):
+	bot.send_message(723253749, f'Сообщение от {message.from_user.first_name}\n{message.from_user.id}\n{message.text}')
+
+    
 bot.polling(none_stop=True, timeout=300)
