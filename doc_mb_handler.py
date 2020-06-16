@@ -4,6 +4,7 @@ from modbus.client import *
 import csv, time, datetime
 from pandas.tseries.offsets import Hour, Minute, Day
 import matplotlib.pyplot as plt
+from time import sleep
 
 apihelper.proxy = {'https':'socks5://cx1b2j:E1caTT@186.65.117.60:9396'}
 token = '1298999210:AAHQXHgqW0y0A9kjCPB3XSeBZKDNrgmK9fY'
@@ -137,6 +138,7 @@ def echo_msg(message):
 
 while True:
 	try:
-		bot.polling(none_stop=True, timeout=300)
-	except:
-		print('ой... ошибчк...')
+		bot.polling(none_stop=True)
+	except Exception as e:
+		print(e)
+		speep(10)
