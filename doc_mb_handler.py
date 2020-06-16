@@ -2,6 +2,8 @@ import telebot
 from telebot import apihelper
 from modbus.client import *
 import csv, time, datetime
+from pandas.tseries.offsets import Hour, Minute, Day
+import matplotlib.pyplot as plt
 
 apihelper.proxy = {'https':'socks5://cx1b2j:E1caTT@186.65.117.60:9396'}
 token = '1298999210:AAHQXHgqW0y0A9kjCPB3XSeBZKDNrgmK9fY'
@@ -44,6 +46,32 @@ def get_data():
         print('Неудачная попытка опроса.')
         bot.reply_to(message, 'Опрос не удался')
     return data_dict
+
+def make_graph(mean_int, interval):
+    df = pd.read_csv('data.csv', encoding='Windows-1251')
+    df['Дата Время'] = pd.to_datetime(df['Дата Время'])
+    df.index = pd.to_datetime(df['Дата Время'])
+
+    data_mean = df.resample(mean_int).mean()
+    data_sample = data_mean[data_mean.index[-1]-interval:]
+
+    plt.figure(figsize=(15,5))
+    plt.ylim([-1000, 7000])
+    plt.ylabel('кВт')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.plot(data_sample.index, data_sample['Мощность завода'], '-')
+    plt.plot(data_sample.index, data_sample['MainsImport'], '-')
+    plt.plot(data_sample.index, data_sample['Сумм мощность ГПГУ'], '-')
+    plt.legend(['Завод', 'Импорт', 'ГПГУ'])
+    plt.savefig('1.png')
+
+@bot.message_handler(commands=['wtf'])
+def send_data_1hour(message):
+	make_graph('T', Hour())
+	img = open('1.png', 'rb')
+	bot.send_photo(message.from_user.id, img)
+	
 
 @bot.message_handler(commands=['wtf'])
 def send_status(message):
