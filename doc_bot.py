@@ -1,7 +1,7 @@
-from modbus.client import *
-import csv, time, datetime, telebot, json, requests, shutil
+﻿from modbus.client import *
+import csv, time, datetime, telebot, json, requests, shutil, re
 import pandas as pd
-from pandas.tseries.offsets import Hour, Minute, Day
+from pandas.tseries.offsets import Hour, Day
 import matplotlib.pyplot as plt 
 
 def get_updates():
@@ -54,13 +54,13 @@ def get_data():
             'ГПГУ 4 ': number_sing(gensets[3]), 
             'ГПГУ 5 ': number_sing(gensets[4]), 
             'MainsImport': number_sing(mains_import), 
-            'Мощность завода': object_p, 
+            'Мощность завода': number_sing(object_p), 
             'MWh': mwh, 
-            'Сумм мощность ГПГУ': tot_run_p_act, 
+            'Сумм мощность ГПГУ': number_sing(tot_run_p_act), 
             'BIN': b_in}
-    except:
+    except Exception as e:
         print('Неудачная попытка опроса IM.')
-    
+        syslog_to_csv(e)
     return data_dict
 
 # запись данных в CSV
@@ -69,10 +69,14 @@ def to_csv(data_file, order, data):
         writer = csv.DictWriter(f, order)
         writer.writerow(data)
 
-# запись в лог
-def log_to_csv(text):
+# запись в логи
+def msglog_to_csv(text):
     with open('msglog.log', 'a', newline='') as f:
-        f.write(text + '\n')
+        f.write(str(text) + '\n')
+
+def syslog_to_csv(text):
+    with open('syslog.log', 'a', newline='') as f:
+        f.write(str(text) + '\n')
 
 # рассылка сообщений по списку ID
 def send_messages(id_list, text):
@@ -80,9 +84,8 @@ def send_messages(id_list, text):
         for i in id_list:
             url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={i}&text={text}&parse_mode=Markdown'
             r= requests.post(url)
-            log_to_csv(text)
     except:
-        print('Неудачная отправка сообщения')
+        syslog_to_csv('Неудачная отправка сообщения')
 
 def make_graph(mean_int, interval):
     try:
@@ -104,12 +107,12 @@ def make_graph(mean_int, interval):
         plt.axhline(y=data_sample['Сумм мощность ГПГУ'].mean(), alpha=0.5, color='g')
         plt.legend(['Завод', 'ГПГУ', 'Импорт'])
         plt.figtext(.13, .96, f'Средняя мощность завода на выбранном интервале: {round(data_sample["Мощность завода"].mean())} кВт')
-        plt.figtext(.13, .93, f'Средняя мощность ГПГУ на выбранном интервале: {round(data_sample["Сумм мощность ГПГУ"].mean())} кВт.   Выработано {int(data_sample["MWh"][-1]-data_sample["MWh"][0])} кВт ч')
+        plt.figtext(.13, .93, f'Средняя мощность ГПГУ на выбранном интервале: {round(data_sample["Сумм мощность ГПГУ"].mean())} кВт.   Выработано {int(data_sample["MWh"][-1]-data_sample["MWh"][0])} МВт ч')
         plt.figtext(.13, .9, f'Средний импорт на выбранном интервале: {round(data_sample["MainsImport"].mean())} кВт')
         plt.savefig('1.png')
     except Exception as e:
         shutil.copyfile('fail.png', '1.png')
-        print(e)
+        syslog_to_csv(e)
     
 # отправка отчета в виде графика с подписями
 def send_report(id_list):
@@ -129,8 +132,8 @@ def send_report(id_list):
             json.dump(jdata, f, indent=4)
 
     except Exception as e:
-        print('\n\nНеудачная отправка send_report\n\n')
-        print(e)
+        syslog_to_csv('\n\nНеудачная отправка send_report\n\n')
+        syslog_to_csv(e)
                
 def reset_report_marker():
     with open('config.json', 'r') as f:
@@ -152,51 +155,58 @@ def send_graph(message_id):
     try:
         requests.post(url, files=files, data=data)
     except Exception as e:
-        print(e)
+        syslog_to_csv(e)
+        
+def send_document(user_id, file):
+    url = f"https://api.telegram.org/bot{token}/sendDocument"
+    files = {'document': open(file, 'rb')}
+    data = {'chat_id' : user_id}
+    try:
+        requests.post(url, files=files, data=data)
+    except Exception as e:
+        syslog_to_csv(e)
     
 def handler_updates(message):
+    pattern_hours = r'\/(\d{1,2})h' # шаблон для определения количества часов в интервале
+    pattern_days = r'\/(\d{1,2})d' # шаблон для определения количества дней в интервале
     message_id = message['message']['from']['id']
     text = message['message']['text']
-    print(message_id)
-    print(text)
+    msg_report = f"{datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}. Запрос от {message['message']['from']['first_name']}, id: {message['message']['from']['id']}\n{message['message']['text']}\n"
+    msglog_to_csv(msg_report)
+    syslog_to_csv(message_id)
+    syslog_to_csv(text)
     
     if text == '/wtf':
-        log_to_csv(str(message))
         df = pd.read_csv(data_file, parse_dates=['Дата Время'], index_col=['Дата Время'])[-5:]
         text = f"*{datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}*\n\n*ГПГУ 1: *{int(df['ГПГУ 1 '].mean())} кВт\n*ГПГУ 2: *{int(df['ГПГУ 2 '].mean())} кВт\n*ГПГУ 3: *{int(df['ГПГУ 3 '].mean())} кВт\n*ГПГУ 4: *{int(df['ГПГУ 4 '].mean())} кВт\n*ГПГУ 5: *{int(df['ГПГУ 5 '].mean())} кВт\n\n*Мощность завода: *{int(df['Мощность завода'].mean())} кВт\n*Сумм мощность ГПГУ: *{int(df['Сумм мощность ГПГУ'].mean())} кВт\n*Импорт: *{int(df['MainsImport'].mean())} кВт\n\n*MWh: *{df['MWh'][-1]}"
-        print(text)
         send_messages([message_id], text)
+
+    if text == '/get_csv':
+        send_document(message_id, data_file)
         
-    if text == '/get_data_3hour':
-        make_graph('T', Hour(3))
-        send_graph(message_id)
+    if text == '/get_msglog':
+        send_document(message_id, 'msglog.log')
         
-    if text == '/get_data_12hour':
-        make_graph('2T', Hour(12))
+    if text == '/get_syslog':
+        send_document(message_id, 'syslog.log')
+
+    # совпадение с шаблоном запроса часового интервала в формате: /get_data_in_3_hours
+    get_hours = re.match(pattern_hours, text)
+    if get_hours: 
+        h = int(get_hours.group(1))
+        make_graph('1T', Hour(h))
         send_graph(message_id)
 
-    if text == '/get_data_24hour':
-        make_graph('2T', Hour(24))
+    # совпадение с шаблоном запроса часового интервала в формате: /get_data_in_3_days
+    get_days = re.match(pattern_days, text)
+    if get_days: 
+        d = int(get_days.group(1))
+        make_graph('2T', Day(d))
         send_graph(message_id)
 
-    if text == '/get_data_3days':
-        make_graph('5T', Day(3))
-        send_graph(message_id)
-
-    if text == '/get_data_7days':
-        make_graph('10T', Day(7))
-        send_graph(message_id)
-
-    if text == '/get_data_14days':
-        make_graph('10T', Day(14))
-        send_graph(message_id)
-
-    if text == '/get_data_30days':
-        make_graph('10T', Day(30))
-        send_graph(message_id)
-       
-    log_to_csv(str(message))
-#         bot.send_message(723253749, f'Сообщение от {message['message']['from']['first_name']}\n{message['message']['from']['id']}\n{message['text']}')
+    # Оповещалка о запросах
+    if message['message']['from']['id'] != 723253749:
+    	send_messages([723253749], msg_report)
 
 id_list = get_id_list()
 
@@ -221,6 +231,9 @@ data_file = "data.csv"
 #    writer = csv.writer(f)
 #    writer.writerow(titles)
 
+while not get_data():
+    time.sleep(1)
+    
 data_dict_old = get_data()
 
 # Основной цикл
@@ -228,21 +241,25 @@ while True:
     data_dict_new = get_data() if get_data() else data_dict_old # если данные не получены, то оставляю старые значения 
     
     for k in ['ГПГУ 1 ', 'ГПГУ 2 ', 'ГПГУ 3 ', 'ГПГУ 4 ', 'ГПГУ 5 ']:
-        if data_dict_old[k] > 0 and data_dict_new[k] <= 0:
+        if data_dict_old[k] > 0 and data_dict_new[k] == 0:
             text = f'{k} остановлена {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}'
             send_messages(id_list, text)
+            syslog_to_csv(text)
          
-        if data_dict_old[k] <= 0 and data_dict_new[k] > 0:
+        if data_dict_old[k] == 0 and data_dict_new[k] > 0:
             text = f'{k} включена в работу {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}'
             send_messages(id_list, text)
+            syslog_to_csv(text)
             
     if data_dict_old['BIN'] & 1 and not (data_dict_new['BIN'] & 1): # бит 1 с 1 на 0
         text = f'МСВ разомкнут, работаем в острове. {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}'
         send_messages(id_list, text)
+        syslog_to_csv(text)
 
     if not (data_dict_old['BIN'] & 1) and data_dict_new['BIN'] & 1: # бит 1 с 0 на 1
         text = f'МСВ замкнут, работаем в нормальном режиме. {datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")}'
         send_messages(id_list, text)
+        syslog_to_csv(text)
 
     # Отправка ежедневного отчёта
     if datetime.datetime.now().hour==17:

@@ -1,0 +1,841 @@
+{
+    "ok": true,
+    "result": [
+        {
+            "update_id": 548407889,
+            "message": {
+                "message_id": 1359,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593138908,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407890,
+            "message": {
+                "message_id": 1361,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140548,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407891,
+            "message": {
+                "message_id": 1362,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140591,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407892,
+            "message": {
+                "message_id": 1363,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140608,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407893,
+            "message": {
+                "message_id": 1364,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140761,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407894,
+            "message": {
+                "message_id": 1366,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140765,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407895,
+            "message": {
+                "message_id": 1368,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140795,
+                "text": "/7d",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407896,
+            "message": {
+                "message_id": 1370,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140846,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407897,
+            "message": {
+                "message_id": 1372,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593140868,
+                "text": "/2d",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407898,
+            "message": {
+                "message_id": 1374,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593141118,
+                "text": "/14d",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407899,
+            "message": {
+                "message_id": 1376,
+                "from": {
+                    "id": 1036253569,
+                    "is_bot": false,
+                    "first_name": "\u0416\u0435\u043a\u0430",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 1036253569,
+                    "first_name": "\u0416\u0435\u043a\u0430",
+                    "type": "private"
+                },
+                "date": 1593141572,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407900,
+            "message": {
+                "message_id": 1381,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593147257,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407901,
+            "message": {
+                "message_id": 1383,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593150559,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407902,
+            "message": {
+                "message_id": 1385,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593150583,
+                "text": "/2h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407903,
+            "message": {
+                "message_id": 1387,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593150606,
+                "text": "/12h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407904,
+            "message": {
+                "message_id": 1389,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593163493,
+                "text": "/12h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407905,
+            "message": {
+                "message_id": 1399,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593168903,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407906,
+            "message": {
+                "message_id": 1405,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593173578,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407907,
+            "message": {
+                "message_id": 1407,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593182524,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407908,
+            "message": {
+                "message_id": 1419,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593188595,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407909,
+            "message": {
+                "message_id": 1423,
+                "from": {
+                    "id": 1036253569,
+                    "is_bot": false,
+                    "first_name": "\u0416\u0435\u043a\u0430",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 1036253569,
+                    "first_name": "\u0416\u0435\u043a\u0430",
+                    "type": "private"
+                },
+                "date": 1593190853,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407910,
+            "message": {
+                "message_id": 1424,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593190854,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407911,
+            "message": {
+                "message_id": 1446,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593212576,
+                "text": "/12h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407912,
+            "message": {
+                "message_id": 1448,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593212622,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407913,
+            "message": {
+                "message_id": 1450,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593212932,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407914,
+            "message": {
+                "message_id": 1452,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593212961,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407915,
+            "message": {
+                "message_id": 1454,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593215478,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407916,
+            "message": {
+                "message_id": 1456,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593217311,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407917,
+            "message": {
+                "message_id": 1458,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593218778,
+                "text": "/wtf",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 4,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        },
+        {
+            "update_id": 548407918,
+            "message": {
+                "message_id": 1460,
+                "from": {
+                    "id": 723253749,
+                    "is_bot": false,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 723253749,
+                    "first_name": "\u0420\u043e\u043c\u0430\u043d",
+                    "username": "romaly123",
+                    "type": "private"
+                },
+                "date": 1593218795,
+                "text": "/3h",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 3,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        }
+    ]
+}
