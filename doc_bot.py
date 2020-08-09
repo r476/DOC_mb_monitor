@@ -1,5 +1,5 @@
 ﻿from modbus.client import *
-import csv, time, datetime, telebot, json, requests, shutil, re
+import csv, time, datetime, telebot, json, requests, shutil, re, os.path
 import pandas as pd
 from pandas.tseries.offsets import Hour, Day
 import matplotlib.pyplot as plt 
@@ -14,7 +14,7 @@ def get_updates():
             updates_list.append(u['update_id'])
     try:
         method = 'getUpdates'
-        r = requests.get(f'https://api.telegram.org/bot{token}/{method}')
+        r = requests.get(f'https://api.telegram.org/bot{token}/{method}', timeout=120)
 
         for u in r.json()['result']:
             if u['update_id'] not in updates_list:
@@ -80,12 +80,14 @@ def syslog_to_csv(text):
 
 # рассылка сообщений по списку ID
 def send_messages(id_list, text):
-    try:
-        for i in id_list:
+    for i in id_list:
+        time.sleep(5)
+        try:
             url = f'https://api.telegram.org/bot{token}/sendMessage?chat_id={i}&text={text}&parse_mode=Markdown'
-            r= requests.post(url)
-    except:
-        syslog_to_csv('Неудачная отправка сообщения')
+            r= requests.post(url, timeout=120)
+        except:
+            syslog_to_csv(f'Неудачная отправка сообщения пользователю {id_list}')
+        time.sleep(5)
 
 def make_graph(mean_int, interval):
     try:
@@ -95,7 +97,7 @@ def make_graph(mean_int, interval):
         data_sample = data_mean[data_mean.index[-1]-interval:]
 
         plt.figure(figsize=(12,6))
-        plt.ylim([-1000, 7000])
+        plt.ylim([-1000, 7500])
         plt.ylabel('кВт')
     #    plt.xticks(rotation=45)
         plt.grid(True)
@@ -110,19 +112,21 @@ def make_graph(mean_int, interval):
         plt.figtext(.13, .93, f'Средняя мощность ГПГУ на выбранном интервале: {round(data_sample["Сумм мощность ГПГУ"].mean())} кВт.   Выработано {int(data_sample["MWh"][-1]-data_sample["MWh"][0])} МВт ч')
         plt.figtext(.13, .9, f'Средний импорт на выбранном интервале: {round(data_sample["MainsImport"].mean())} кВт')
         plt.savefig('1.png')
+        plt.close()
     except Exception as e:
         shutil.copyfile('fail.png', '1.png')
         syslog_to_csv(e)
     
 # отправка отчета в виде графика с подписями
 def send_report(id_list):
+    # Формирую график за сутки -------------------------------------
     try:
         make_graph('2T', Hour(24))
         for i in id_list:
             url = f"https://api.telegram.org/bot{token}/sendPhoto"
             files = {'photo': open('1.png', 'rb')}
             data = {'chat_id' : i}
-            requests.post(url, files=files, data=data)
+            requests.post(url, files=files, data=data, timeout=120)
             
         with open('config.json', 'r') as f:
             jdata = json.load(f)
@@ -134,7 +138,27 @@ def send_report(id_list):
     except Exception as e:
         syslog_to_csv('\n\nНеудачная отправка send_report\n\n')
         syslog_to_csv(e)
-               
+    # Формирую суточный отчёт в файл DOC_report24.csv
+    try:
+        data_dict = {}
+        report_file_name = 'DOC_report24.csv'
+        if not os.path.exists(report_file_name):
+                with open(report_file_name, 'w') as f:
+                    f.write(','.join(['DateTime', 'ObjectConsuption', 'MachinesPower', 'Import', 'MWh']) + '\n')
+
+        df = pd.read_csv(data_file, parse_dates=['Дата Время'], index_col=['Дата Время'])
+        data_sample = df[df.index[-1]-Hour(24):]
+        data_dict['DateTime'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+        data_dict['ObjectConsuption'] = int(data_sample['Мощность завода'].mean())
+        data_dict['MachinesPower'] = int(data_sample['Сумм мощность ГПГУ'].mean())
+        data_dict['Import'] = int(data_sample['MainsImport'].mean())
+        data_dict['MWh'] = data_sample['MWh'][-1] - data_sample['MWh'][0]
+        to_csv(report_file_name, ['DateTime', 'ObjectConsuption', 'MachinesPower', 'Import', 'MWh'], data_dict)        
+    except Exception as e:
+        syslog_to_csv('\n\nНеудачное сохранение суточного отчёта в файл DOC_report24.csv\n\n')
+        syslog_to_csv(e)
+        
+        
 def reset_report_marker():
     with open('config.json', 'r') as f:
         jdata = json.load(f)
@@ -153,7 +177,7 @@ def send_graph(message_id):
     files = {'photo': open('1.png', 'rb')}
     data = {'chat_id' : message_id}
     try:
-        requests.post(url, files=files, data=data)
+        requests.post(url, files=files, data=data, timeout=120)
     except Exception as e:
         syslog_to_csv(e)
         
@@ -162,13 +186,14 @@ def send_document(user_id, file):
     files = {'document': open(file, 'rb')}
     data = {'chat_id' : user_id}
     try:
-        requests.post(url, files=files, data=data)
+        requests.post(url, files=files, data=data, timeout=120)
     except Exception as e:
         syslog_to_csv(e)
     
 def handler_updates(message):
     pattern_hours = r'\/(\d{1,2})h' # шаблон для определения количества часов в интервале
     pattern_days = r'\/(\d{1,2})d' # шаблон для определения количества дней в интервале
+    add_id_pattern = r'\/add_id_(\d*)' # шаблон для выделения ID из запроса
     message_id = message['message']['from']['id']
     text = message['message']['text']
     msg_report = f"{datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}. Запрос от {message['message']['from']['first_name']}, id: {message['message']['from']['id']}\n{message['message']['text']}\n"
@@ -184,11 +209,42 @@ def handler_updates(message):
     if text == '/get_csv':
         send_document(message_id, data_file)
         
+    if text == '/get_report':
+        send_document(message_id, 'DOC_report24.csv')
+
     if text == '/get_msglog':
         send_document(message_id, 'msglog.log')
         
     if text == '/get_syslog':
         send_document(message_id, 'syslog.log')
+
+    # совпадение с шаблоном добавления ID в формате: /add_id_*********
+    add_id = re.match(add_id_pattern, text)
+    if add_id and message_id==723253749: 
+        user_id = int(add_id.group(1))
+        with open('config.json', 'r') as f:
+            j = json.load(f)
+        if user_id not in j['accepted_id']:
+            j['accepted_id'].append(user_id)
+            send_messages([723253749], f'Пользователь с id: {user_id} успешно добавлен в рассылку')
+        else:
+            send_messages([723253749], f'Пользователь с id: {user_id} уже есть в рассылке')
+        with open('config.json', 'w') as f:
+            json.dump(j, f, indent=4)
+        id_list = get_id_list()
+
+    # совпадение с шаблоном добавления ID в формате: /del_me
+    if text == '/del_me':
+        try:
+            with open('config.json', 'r') as f:
+                j = json.load(f)
+                j['accepted_id'].remove(message_id)
+                send_messages([message_id], f'Пользователь с id: {message_id} успешно удалён из рассылки')
+            with open('config.json', 'w') as f:
+                json.dump(j, f, indent=4)
+            id_list = get_id_list()
+        except:
+            send_messages([message_id], f'Пользователь с id: {message_id} отсутствует в рассылке')
 
     # совпадение с шаблоном запроса часового интервала в формате: /get_data_in_3_hours
     get_hours = re.match(pattern_hours, text)
@@ -206,7 +262,7 @@ def handler_updates(message):
 
     # Оповещалка о запросах
     if message['message']['from']['id'] != 723253749:
-    	send_messages([723253749], msg_report)
+        send_messages([723253749], msg_report)
 
 id_list = get_id_list()
 
@@ -262,7 +318,7 @@ while True:
         syslog_to_csv(text)
 
     # Отправка ежедневного отчёта
-    if datetime.datetime.now().hour==17:
+    if datetime.datetime.now().hour==19:
         if not is_report_marker_on():
             send_report(id_list)
 
